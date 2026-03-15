@@ -3,6 +3,6 @@ services:
     name: heattouch-pdf
     env: python
     plan: free
-    buildCommand: apt-get install -y poppler-utils && pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt
     startCommand: gunicorn server:app
     healthCheckPath: /health
