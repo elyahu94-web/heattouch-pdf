@@ -92,8 +92,8 @@ def fill_quote_pdf(data):
         if font is None:
             font = ImageFont.load_default()
 
-        # עברית RTL — תיקון bidi
-        display = value if is_ltr else fix_bidi(value)
+        # תיקון bidi לכל השדות (עברית + ערבוב עברית/אנגלית)
+        display = fix_bidi(value)
 
         bbox   = draw.textbbox((0, 0), display, font=font)
         text_w = bbox[2] - bbox[0]
