@@ -36,6 +36,13 @@ def fix_bidi(text):
         return text
 
 def fill_quote_pdf(data):
+    # תמיכה בפורמט items array מ-Apps Script
+    items = data.get('items', [])
+    if items:
+        for i, row in enumerate(items[:5], 1):
+            data[f'item{i}'] = row.get('item', '')
+            data[f'qty{i}']  = row.get('qty', '')
+
     with open(FIELDS_PATH, encoding='utf-8') as f:
         config = json.load(f)
 
