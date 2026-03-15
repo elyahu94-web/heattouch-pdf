@@ -81,6 +81,7 @@ def fill_quote_pdf(data):
         x_px  = x_pdf * scale_x
         y_px  = y_pdf * scale_y
         w_px  = w_pdf * scale_x
+        h_px  = float(field.get('h', 14)) * scale_y
         fs_px = max(8, int(fs * scale_y * 1.15))
 
         font = None
@@ -95,8 +96,24 @@ def fill_quote_pdf(data):
         # תיקון bidi לכל השדות (עברית + ערבוב עברית/אנגלית)
         display = fix_bidi(value)
 
+        # הקטן פונט אוטומטית אם הטקסט רחב מדי
+        if font_path:
+            while fs_px > 7:
+                bbox = draw.textbbox((0, 0), display, font=font)
+                if (bbox[2] - bbox[0]) <= w_px:
+                    break
+                fs_px -= 1
+                try:
+                    font = ImageFont.truetype(font_path, fs_px)
+                except Exception:
+                    break
+
         bbox   = draw.textbbox((0, 0), display, font=font)
         text_w = bbox[2] - bbox[0]
+        text_h = bbox[3] - bbox[1]
+
+        # מרכז אנכית בתוך הגובה
+        ty = y_px + (h_px - text_h) / 2
 
         if align == 'right':
             tx = x_px + w_px - text_w
@@ -105,7 +122,7 @@ def fill_quote_pdf(data):
         else:
             tx = x_px
 
-        draw.text((tx, y_px), display, fill=(0, 0, 0), font=font)
+        draw.text((tx, ty), display, fill=(0, 0, 0), font=font)
 
     tmp_img = os.path.join(BASE_DIR, '_tmp_filled.jpg')
     img.save(tmp_img, 'JPEG', quality=93)
