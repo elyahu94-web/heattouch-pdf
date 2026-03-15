@@ -15,6 +15,7 @@ TEMPLATE_PATH = os.path.join(BASE_DIR, 'quote_template.pdf')
 FIELDS_PATH   = os.path.join(BASE_DIR, 'fields_template.json')
 
 FONT_CANDIDATES = [
+    os.path.join(BASE_DIR, 'FreeSans.ttf'),
     os.path.join(BASE_DIR, 'NotoSansHebrew.ttf'),
     '/usr/share/fonts/truetype/freefont/FreeSans.ttf',
     '/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf',
